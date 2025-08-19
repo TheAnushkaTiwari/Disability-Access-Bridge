@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Home - Disability Access Bridge{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Empowering Rajasthan's Divyangjan</h1>
+    <p>Your central hub for resources, rights, and community support.</p>
+</section>
+
+<section class="features">
+    <h2>Key Resources</h2>
+    <div class="feature-grid">
+        <a href="{% url 'resources' %}?category={{ ALL_CATEGORIES.0.id }}" class="feature-card"><h3>{{ ALL_CATEGORIES.0.name }}</h3></a>
+        <a href="{% url 'resources' %}?category={{ ALL_CATEGORIES.1.id }}" class="feature-card"><h3>{{ ALL_CATEGORIES.1.name }}</h3></a>
+        <a href="{% url 'resources' %}?category={{ ALL_CATEGORIES.2.id }}" class="feature-card"><h3>{{ ALL_CATEGORIES.2.name }}</h3></a>
+    </div>
+</section>
+
+<section>
+    <h2>Latest News</h2>
+    <div class="news-list">
+        {% for article in latest_news %}
+            <article class="news-item-summary">
+                <h3><a href="{% url 'news_detail' article.pk %}">{{ article.title }}</a></h3>
+                <p class="meta">Published on {{ article.published_date|date:"F d, Y" }}</p>
+                <p>{{ article.content|truncatewords:30 }}</p>
+            </article>
+        {% empty %}
+            <p>No news articles available at the moment.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

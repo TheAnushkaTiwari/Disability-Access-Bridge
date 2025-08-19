@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Resources - Disability Access Bridge{% endblock %}
+
+{% block content %}
+    <h1>Resource Directory</h1>
+    <p>Find information on education, employment, legal rights, and government schemes.</p>
+
+    <form method="get" action="{% url 'resources' %}" class="filter-form">
+        <input type="text" name="q" placeholder="Search resources..." value="{{ query }}">
+        <select name="category">
+            <option value="">All Categories</option>
+            {% for category in ALL_CATEGORIES %}
+                <option value="{{ category.id }}" {% if category.id == selected_category_id %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn">Search</button>
+    </form>
+
+    <div class="resource-list">
+        {% for resource in resources %}
+            <div class="resource-card">
+                <h3>{{ resource.title }}</h3>
+                <span class="category-tag">{{ resource.category.name }}</span>
+                <p>{{ resource.description }}</p>
+                {% if resource.contact_info %}<p><strong>Contact:</strong> {{ resource.contact_info }}</p>{% endif %}
+                {% if resource.website_url %}<p><a href="{{ resource.website_url }}" target="_blank" rel="noopener noreferrer">Visit Website</a></p>{% endif %}
+            </div>
+        {% empty %}
+            <p>No resources found matching your criteria.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

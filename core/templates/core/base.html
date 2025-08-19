@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Disability Access Bridge{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'core/style.css' %}">
+</head>
+<body id="page-body">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="{% url 'home' %}">Disability Access Bridge</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'resources' %}">Resources</a></li>
+                    <li><a href="{% url 'news_list' %}">News</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                {% if user.is_authenticated %}
+                    <span>Welcome, {{ user.username }}</span>
+                    {# FIX: Replaced logout link with a form to send a POST request #}
+                    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-secondary btn-logout">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
+                    <a href="{% url 'signup' %}" class="btn">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    
+    <div class="accessibility-toolbar">
+        <button id="contrast-toggle" title="Toggle High Contrast">Contrast</button>
+        <button id="font-increase" title="Increase Font Size">A+</button>
+        <button id="font-decrease" title="Decrease Font Size">A-</button>
+        <button id="tts-button" title="Read Page Content Aloud">Speak</button>
+    </div>
+
+    <main id="main-content" class="container">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; {% now "Y" %} Disability Access Bridge. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'core/main.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+    <article class="news-article-full">
+        <h1>{{ article.title }}</h1>
+        <p class="meta">
+            Published on {{ article.published_date|date:"F d, Y" }}
+            {% if article.author %} by {{ article.author.username }}{% endif %}
+        </p>
+        <div class="article-content">
+            {{ article.content|linebreaks }}
+        </div>
+        <a href="{% url 'news_list' %}" class="btn-secondary">&larr; Back to News</a>
+    </article>
+{% endblock %}

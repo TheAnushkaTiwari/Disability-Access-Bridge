@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+
+{% block title %}News & Announcements{% endblock %}
+
+{% block content %}
+    <h1>News & Announcements</h1>
+    <div class="news-list-full">
+        {% for article in news_list %}
+            <article class="news-item">
+                <h2><a href="{% url 'news_detail' article.pk %}">{{ article.title }}</a></h2>
+                <p class="meta">Published on {{ article.published_date|date:"F d, Y" }}</p>
+                <p>{{ article.content|truncatewords:50 }}</p>
+            </article>
+        {% empty %}
+            <p>No news to display.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
