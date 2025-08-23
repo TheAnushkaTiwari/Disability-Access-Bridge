@@ -12,13 +12,14 @@ Current Features
 📝 Feedback System: Collects accessibility feedback from users.
 🔐 User Login & Signup: Secure user accounts for personalization.
 
-🔮 Future Roadmap: Core Technological Pillars
+🔮 Future Roadmap:
 The platform is currently a prototype with placeholder resources. In the future, it will expand into three powerful pillars:
-Inclusive Navigation: Built for maximum accessibility with features like zoom, screen readers, and voice-over support.
-Integration of a Computer Vision model to enable navigation through simple Indian Sign Language (ISL) gestures via webcam.
-Community-Verified Resources: Aggregates verified information on disability rights, policies, grants, and support networks.
-Introduces an Accessibility Score system where users rate real-world locations and services.
-A Predictive Analytics model processes this crowdsourced data to recommend the most accessible options to users.
-AI-Driven Career Matching: A dedicated career portal powered by AI-driven personalization to suggest career paths, job opportunities, and skill-building resources tailored to users.
-Integrated Sign Language Support for an inclusive job search experience.
+
+1. Inclusive Navigation: Built for maximum accessibility with features like zoom, screen readers, and voice-over support.
+2. Integration of a Computer Vision model to enable navigation through simple Indian Sign Language (ISL) gestures via webcam.
+3. Community-Verified Resources: Aggregates verified information on disability rights, policies, grants, and support networks.
+4. Introduces an Accessibility Score system where users rate real-world locations and services.
+5. A Predictive Analytics model processes this crowdsourced data to recommend the most accessible options to users.
+6. AI-Driven Career Matching: A dedicated career portal powered by AI-driven personalization to suggest career paths, job opportunities, and skill-building resources tailored to users.
+7. Integrated Sign Language Support for an inclusive job search experience.
 
