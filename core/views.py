@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from .models import Resource, NewsArticle, Category
+from .models import Resource, NewsArticle, Category, Disability
 from .forms import ContactForm
 
 def home_view(request):
@@ -21,13 +21,31 @@ def resources_view(request):
     
     if category_id:
         resources = resources.filter(category_id=category_id)
+
+    all_categories = Category.objects.all().order_by('name')
+    all_disabilities = Disability.objects.all().order_by('name')
         
     context = {
         'resources': resources,
         'query': query,
-        'selected_category_id': int(category_id) if category_id else None
+        'selected_category_id': int(category_id) if category_id else None,
+        'all_categories': all_categories,
+        'all_disabilities': all_disabilities,
     }
     return render(request, 'core/resources.html', context)
+
+def disability_resources_view(request, disability_name):
+    # Fetch the disability object using the name from the URL
+    disability = get_object_or_404(Disability, name__iexact=disability_name.replace('-', ' '))
+    
+    # Get resources related to that disability
+    resources = disability.resources.filter(is_verified=True).order_by('-updated_at')
+
+    context = {
+        'disability': disability,
+        'resources': resources,
+    }
+    return render(request, 'core/disability_resources.html', context)
 
 def news_list_view(request):
     news_list = NewsArticle.objects.all()

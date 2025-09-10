@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ disability.name }} Resources{% endblock %}
+
+{% block content %}
+    <h1>{{ disability.name }} Resources</h1>
+    <p>Resources specifically curated for {{ disability.name }}.</p>
+
+    <div class="resource-list">
+        {% for resource in resources %}
+            <div class="resource-card">
+                <h3>{{ resource.title }}</h3>
+                <span class="category-tag">{{ resource.category.name }}</span>
+                <p>{{ resource.description }}</p>
+                {% if resource.contact_info %}<p><strong>Contact:</strong> {{ resource.contact_info }}</p>{% endif %}
+                {% if resource.website_url %}<p><a href="{{ resource.website_url }}" target="_blank" rel="noopener noreferrer">Visit Website</a></p>{% endif %}
+            </div>
+        {% empty %}
+            <p>No resources found for this disability at the moment.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -10,6 +10,15 @@ class Category(models.Model):
     
     def __str__(self):
         return self.name
+    
+class Disability(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    
+    class Meta:
+        verbose_name_plural = "Disabilities"
+
+    def __str__(self):
+        return self.name
 
 class Resource(models.Model):
     title = models.CharField(max_length=255)
@@ -18,10 +27,12 @@ class Resource(models.Model):
     contact_info = models.TextField(blank=True)
     website_url = models.URLField(blank=True)
     is_verified = models.BooleanField(default=True)
+    disabilities = models.ManyToManyField(Disability, blank=True, related_name="resources")
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
+    
 
 class NewsArticle(models.Model):
     title = models.CharField(max_length=255)
