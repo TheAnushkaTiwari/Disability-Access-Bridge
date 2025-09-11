@@ -6,19 +6,33 @@
     <h1>Resource Directory</h1>
     <p>Find information on education, employment, legal rights, and government schemes.</p>
 
-    <form method="get" action="{% url 'resources' %}" class="filter-form">
-        <input type="text" name="q" placeholder="Search resources..." value="{{ query }}">
-        <select name="category">
-            <option value="">All Categories</option>
-            {% for category in ALL_CATEGORIES %}
-                <option value="{{ category.id }}" {% if category.id == selected_category_id %}selected{% endif %}>
-                    {{ category.name }}
-                </option>
-            {% endfor %}
-        </select>
-        <button type="submit" class="btn">Search</button>
-    </form>
-
+    <div class="filter-controls">
+        <form method="get" action="{% url 'resources' %}" class="filter-form">
+            <input type="text" name="q" placeholder="Search resources..." value="{{ query }}">
+            <select name="category">
+                <option value="">All Categories</option>
+                {% for category in ALL_CATEGORIES %}
+                    <option value="{{ category.id }}" {% if category.id == selected_category_id %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn">Search</button>
+        </form>
+        
+        <div class="disability-dropdown-container">
+            <label for="disability-select">Filter by Disability:</label>
+            <select id="disability-select">
+                <option value="">Select a Disability</option>
+                {% for disability in all_disabilities %}
+                    <option value="{% url 'disability_resources' disability_name=disability.name|slugify %}">
+                        {{ disability.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    
     <div class="resource-list">
         {% for resource in resources %}
             <div class="resource-card">
@@ -32,4 +46,13 @@
             <p>No resources found matching your criteria.</p>
         {% endfor %}
     </div>
+
+    <script>
+        document.getElementById('disability-select').addEventListener('change', function() {
+            const url = this.value;
+            if (url) {
+                window.location.href = url;
+            }
+        });
+    </script>
 {% endblock %}

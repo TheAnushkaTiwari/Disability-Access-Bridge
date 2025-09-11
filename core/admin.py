@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Resource, NewsArticle, ContactSubmission
+from .models import Category, Resource, NewsArticle, ContactSubmission, Disability
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -22,3 +22,7 @@ class ContactSubmissionAdmin(admin.ModelAdmin):
     list_display = ('subject', 'name', 'submitted_at', 'is_read')
     list_filter = ('is_read',)
     readonly_fields = ('name', 'email', 'subject', 'message', 'submitted_at')
+
+@admin.register(Disability)
+class DisabilityAdmin(admin.ModelAdmin):
+    list_display = ('name',)
