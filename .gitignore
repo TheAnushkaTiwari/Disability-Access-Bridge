@@ -1,0 +1,8 @@
+# Ignore python cache files
+__pycache__/
+*.pyc
+
+# Ignore the database
+db.sqlite3
+
+core/static/core/isl_videos/

@@ -171,3 +171,77 @@ main { padding: 2rem 0; }
     transition: top 0.3s;
 }
 .skip-link:focus { top: 10px; left: 10px; }
+
+/* ========================================
+   ISL (Indian Sign Language) Popup Modal
+   ======================================== */
+
+/* The modal background (hidden by default) */
+.isl-popup {
+    display: none; 
+    position: fixed; /* Stays in place even when scrolling */
+    z-index: 1000; /* Sits on top of everything else */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+}
+
+/* Modal Content Box */
+.isl-popup-content {
+    background-color: #fefefe;
+    color: #333; /* Dark text for light background */
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more specific, e.g., 600px */
+    max-width: 640px; /* Max width for the video player */
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+/* The Close Button */
+/* in static/core/style.css */
+
+#isl-close-button {
+    color: #333; /* Darker color to be more visible */
+    position: absolute;
+    top: 0px; /* Move to the very top edge */
+    right: 0px; /* Move to the very right edge */
+    
+    /* Make the click target bigger */
+    font-size: 28px;
+    font-weight: bold;
+    padding: 10px 15px; /* Adds a large clickable padded area */
+    
+    cursor: pointer;
+    line-height: 1; /* Keeps the 'x' centered */
+}
+
+#isl-close-button:hover,
+#isl-close-button:focus {
+    color: #f00; /* Bright red on hover */
+    background-color: #eee; /* Light gray background on hover */
+}
+
+/* Style for the transcription text */
+#isl-transcription {
+    margin-top: 15px;
+    font-size: 1.1em;
+    color: #555;
+    text-align: center;
+}
+/* Highlight style for the active ISL word or letter */
+.isl-active-text {
+    background-color: #ffeb3b; /* Bright Yellow */
+    color: #000; /* Black Text */
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 4px;
+    border-bottom: 2px solid #fbc02d;
+    transition: background-color 0.2s ease;
+}

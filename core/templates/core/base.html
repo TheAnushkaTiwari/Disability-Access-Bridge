@@ -20,6 +20,7 @@
                     <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="{% url 'resources' %}">Resources</a></li>
                     <li><a href="{% url 'news_list' %}">News</a></li>
+                    <li><a href="{% url 'forum' %}"> Community Forum</a></li>
                     <li><a href="{% url 'contact' %}">Contact</a></li>
                 </ul>
             </nav>
@@ -38,13 +39,24 @@
             </div>
         </div>
     </header>
+
+   
     
     <div class="accessibility-toolbar">
         <button id="contrast-toggle" title="Toggle High Contrast">Contrast</button>
         <button id="font-increase" title="Increase Font Size">A+</button>
         <button id="font-decrease" title="Decrease Font Size">A-</button>
         <button id="tts-button" title="Read Page Content Aloud">Speak</button>
+        <button id="isl-button" title="Speak to ISL Converter">Speak (ISL)</button>
+        <div id="google_translate_element" style="display: inline-block; vertical-align: middle;"></div>
     </div>
+
+    <div id="isl-modal" class="isl-popup" style="display:none;">
+    <div class="isl-popup-content">
+        <span id="isl-close-button">&times;</span>
+        <video id="isl-video-player" width="100%" controls></video>
+        <p id="isl-transcription"></p> </div>
+</div>
 
     <main id="main-content" class="container">
         {% if messages %}
@@ -63,6 +75,23 @@
         </div>
     </footer>
 
+    <script>
+        window.STATIC_ISL_PATH = "{% static 'core/isl_videos/' %}";
+    </script>
+
     <script src="{% static 'core/main.js' %}"></script>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+          new google.translate.TranslateElement({
+            pageLanguage: 'en', // Your site's original language
+            includedLanguages: 'hi,en', // Languages to offer (hi=Hindi, en=English)
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+          }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
 </body>
 </html>

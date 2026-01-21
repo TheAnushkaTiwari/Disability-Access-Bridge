@@ -9,6 +9,7 @@ urlpatterns = [
     path('news/<int:pk>/', views.news_detail_view, name='news_detail'),
     path('contact/', views.contact_view, name='contact'),
     path('resources/<str:disability_name>/', views.disability_resources_view, name='disability_resources'),
+    path('forum/', views.forum_view, name='forum'),
     
     # Auth
     path('signup/', views.signup_view, name='signup'),

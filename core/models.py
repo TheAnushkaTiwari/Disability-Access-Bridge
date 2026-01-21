@@ -59,3 +59,14 @@ class ContactSubmission(models.Model):
 
     def __str__(self):
         return f"Message from {self.name} - {self.subject}"
+
+class ForumPost(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at'] # Newest messages first
+
+    def __str__(self):
+        return f"Post by {self.author.username} at {self.created_at}"

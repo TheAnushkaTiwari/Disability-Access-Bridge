@@ -78,3 +78,20 @@ def signup_view(request):
         form = UserCreationForm()
     return render(request, 'core/signup.html', {'form': form})
 
+from .models import ForumPost # Add this to your imports
+
+def forum_view(request):
+    posts = ForumPost.objects.all()
+    
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            content = request.POST.get('content')
+            if content:
+                ForumPost.objects.create(author=request.user, content=content)
+                messages.success(request, "Message posted to the community!")
+                return redirect('forum')
+        else:
+            messages.error(request, "You must be logged in to post.")
+            return redirect('login')
+
+    return render(request, 'core/forum.html', {'posts': posts})

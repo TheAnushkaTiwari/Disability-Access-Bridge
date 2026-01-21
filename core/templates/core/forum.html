@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Community Forum{% endblock %}
+
+{% block content %}
+<h1>Community Forum</h1>
+
+<div class="forum-post-box">
+    {% if user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            <textarea name="content" rows="3" placeholder="Share something with the community..." required></textarea>
+            <button type="submit" class="btn">Post Message</button>
+        </form>
+    {% else %}
+        <div class="message-info">
+            <p>You are viewing the forum as a guest. <a href="{% url 'login' %}">Login</a> or <a href="{% url 'signup' %}">Sign Up</a> to join the conversation.</p>
+        </div>
+    {% endif %}
+</div>
+
+<hr>
+
+<div class="forum-messages">
+    {% for post in posts %}
+        <div class="resource-card"> <p><strong>{{ post.author.username }}</strong> <small class="dark-gray">{{ post.created_at|timesince }} ago</small></p>
+            <p>{{ post.content }}</p>
+        </div>
+    {% empty %}
+        <p>No messages yet. Be the first to start the conversation!</p>
+    {% endfor %}
+</div>
+{% endblock %}
