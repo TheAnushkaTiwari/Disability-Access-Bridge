@@ -7,7 +7,6 @@ image-to-text conversion, and sign language recognition.
 
 Current Features
 🔊 Voice Feature: Screen reader integration with text-to-speech.
-🗺️ Map Integration: Navigation support for accessible routes.
 🔍 Zoom In/Out: Adjustable display settings for visually impaired users.
 📝 Feedback System: Collects accessibility feedback from users.
 🔐 User Login & Signup: Secure user accounts for personalization.
@@ -20,6 +19,4 @@ The platform is currently a prototype with placeholder resources. In the future,
 3. Community-Verified Resources: Aggregates verified information on disability rights, policies, grants, and support networks.
 4. Introduces an Accessibility Score system where users rate real-world locations and services.
 5. A Predictive Analytics model processes this crowdsourced data to recommend the most accessible options to users.
-6. AI-Driven Career Matching: A dedicated career portal powered by AI-driven personalization to suggest career paths, job opportunities, and skill-building resources tailored to users.
-7. Integrated Sign Language Support for an inclusive job search experience.
 
