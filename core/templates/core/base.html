@@ -6,59 +6,74 @@
     <title>{% block title %}Disability Access Bridge{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'core/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body id="page-body">
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <header class="site-header">
-        <div class="container">
+    <div class="accessibility-bar">
+        <div class="container" style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <button id="contrast-toggle" class="btn-access" title="Toggle High Contrast">Contrast</button>
+            <button id="font-increase" class="btn-access" title="Increase Font Size">A+</button>
+            <button id="font-decrease" class="btn-access" title="Decrease Font Size">A-</button>
+            <button id="tts-button" class="btn-access" title="Read Page">Speak</button>
+            <button id="isl-button" class="btn-access" title="Speak to ISL">Speak (ISL)</button>
+            
+            <div id="google_translate_element" style="display: inline-block; margin-left: 10px;"></div>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            
             <div class="logo">
-                <a href="{% url 'home' %}">Disability Access Bridge</a>
+                <a href="{% url 'home' %}" class="logo-text">Disability Access Bridge</a>
             </div>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'resources' %}">Resources</a></li>
-                    <li><a href="{% url 'news_list' %}">News</a></li>
-                    <li><a href="{% url 'forum' %}"> Community Forum</a></li>
-                    <li><a href="{% url 'contact' %}">Contact</a></li>
+
+            <nav class="nav-center">
+                <ul class="nav-links">
+                    <li>
+                        <a href="{% url 'home' %}" class="nav-pill {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'resources' %}" class="nav-pill {% if 'resources' in request.path %}active{% endif %}">Resources</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'news_list' %}" class="nav-pill {% if 'news' in request.path %}active{% endif %}">News</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'forum' %}" class="nav-pill {% if 'forum' in request.path %}active{% endif %}">Community Forum</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'contact' %}" class="nav-pill {% if 'contact' in request.path %}active{% endif %}">Contact</a>
+                    </li>
                 </ul>
             </nav>
-            <div class="header-actions">
+
+            <div class="header-actions auth-buttons">
                 {% if user.is_authenticated %}
-                    <span>Welcome, {{ user.username }}</span>
-                    {# FIX: Replaced logout link with a form to send a POST request #}
+                    <span style="margin-right: 15px; font-weight: 500; color: var(--dark-gray);">Welcome, {{ user.username }}</span>
                     <form method="post" action="{% url 'logout' %}" style="display: inline;">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-secondary btn-logout">Logout</button>
+                        <button type="submit" class="btn-login" style="background: none; border: none; cursor: pointer; padding: 0;">Logout</button>
                     </form>
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
-                    <a href="{% url 'signup' %}" class="btn">Sign Up</a>
+                    <a href="{% url 'login' %}" class="btn-login">Login</a>
+                    <a href="{% url 'signup' %}" class="btn-signup">Sign Up</a>
                 {% endif %}
             </div>
         </div>
     </header>
 
-   
-    
-    <div class="accessibility-toolbar">
-        <button id="contrast-toggle" title="Toggle High Contrast">Contrast</button>
-        <button id="font-increase" title="Increase Font Size">A+</button>
-        <button id="font-decrease" title="Decrease Font Size">A-</button>
-        <button id="tts-button" title="Read Page Content Aloud">Speak</button>
-        <button id="isl-button" title="Speak to ISL Converter">Speak (ISL)</button>
-        <div id="google_translate_element" style="display: inline-block; vertical-align: middle;"></div>
+    <div id="isl-modal" class="isl-popup" style="display:none;">
+        <div class="isl-popup-content">
+            <span id="isl-close-button">&times;</span>
+            <video id="isl-video-player" width="100%" controls></video>
+            <p id="isl-transcription"></p> 
+        </div>
     </div>
 
-    <div id="isl-modal" class="isl-popup" style="display:none;">
-    <div class="isl-popup-content">
-        <span id="isl-close-button">&times;</span>
-        <video id="isl-video-player" width="100%" controls></video>
-        <p id="isl-transcription"></p> </div>
-</div>
-
-    <main id="main-content" class="container">
+    <main id="main-content" class="container" style="min-height: 60vh; padding-top: 2rem;">
         {% if messages %}
             <div class="messages">
                 {% for message in messages %}
@@ -66,12 +81,13 @@
                 {% endfor %}
             </div>
         {% endif %}
+        
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="site-footer">
+    <footer class="site-footer" style="margin-top: 4rem; padding: 2rem 0; background-color: #f8f9fa; text-align: center; border-top: 1px solid #eee;">
         <div class="container">
-            <p>&copy; {% now "Y" %} Disability Access Bridge. All rights reserved.</p>
+            <p style="color: #666;">&copy; {% now "Y" %} Disability Access Bridge. All rights reserved.</p>
         </div>
     </footer>
 
@@ -84,8 +100,8 @@
     <script type="text/javascript">
         function googleTranslateElementInit() {
           new google.translate.TranslateElement({
-            pageLanguage: 'en', // Your site's original language
-            includedLanguages: 'hi,en', // Languages to offer (hi=Hindi, en=English)
+            pageLanguage: 'en',
+            includedLanguages: 'hi,en',
             layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
             autoDisplay: false
           }, 'google_translate_element');

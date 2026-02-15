@@ -9,9 +9,20 @@
             Published on {{ article.published_date|date:"F d, Y" }}
             {% if article.author %} by {{ article.author.username }}{% endif %}
         </p>
+        
         <div class="article-content">
             {{ article.content|linebreaks }}
         </div>
+
+        {% if article.source_url %}
+            <div class="source-link-container" style="margin-top: 20px;">
+                <p><strong>Source:</strong> 
+                    <a href="{{ article.source_url }}" target="_blank" rel="noopener noreferrer" style="color: #005A9C; text-decoration: underline;">
+                        Read the original article on {{ article.source_url|slice:":30" }}...
+                    </a>
+                </p>
+            </div>
+        {% endif %}
         <a href="{% url 'news_list' %}" class="btn-secondary">&larr; Back to News</a>
     </article>
 {% endblock %}

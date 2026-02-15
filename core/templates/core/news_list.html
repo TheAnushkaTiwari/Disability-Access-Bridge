@@ -10,7 +10,16 @@
                 <h2><a href="{% url 'news_detail' article.pk %}">{{ article.title }}</a></h2>
                 <p class="meta">Published on {{ article.published_date|date:"F d, Y" }}</p>
                 <p>{{ article.content|truncatewords:50 }}</p>
-            </article>
+
+                {% if article.source_url %}
+                    <p style="margin-top: 5px; font-size: 0.9rem;">
+                        <strong>Source:</strong> 
+                        <a href="{{ article.source_url }}" target="_blank" rel="noopener noreferrer" style="color: #0056b3; text-decoration: underline;">
+                            Read original article
+                        </a>
+                    </p>
+                {% endif %}
+                </article>
         {% empty %}
             <p>No news to display.</p>
         {% endfor %}

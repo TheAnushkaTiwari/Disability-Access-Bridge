@@ -1,15 +1,25 @@
+/* =========================================
+   1. VARIABLES & RESET
+   ========================================= */
 :root {
+    /* Brand Colors */
     --primary-color: #005A9C;
+    --primary-dark: #004494;
     --secondary-color: #FDB813;
+    
+    /* UI Colors */
     --text-color: #333;
     --bg-color: #fdfdfd;
     --light-gray: #f4f4f4;
     --dark-gray: #555;
+    --nav-bg: #eef4f8; /* New variable for the Navbar background */
+    
     --font-size: 16px;
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: var(--font-main);
     margin: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
@@ -17,67 +27,225 @@ body {
     line-height: 1.6;
 }
 
-/* High Contrast Mode */
+/* =========================================
+   2. HIGH CONTRAST MODE (Preserved)
+   ========================================= */
 body.high-contrast {
     --primary-color: #000;
+    --primary-dark: #333;
     --secondary-color: #FFFF00;
     --text-color: #FFF;
     --bg-color: #000;
     --light-gray: #222;
     --dark-gray: #ccc;
+    --nav-bg: #000;
 }
+
 body.high-contrast a { color: var(--secondary-color); }
+body.high-contrast .nav-pill.active { background-color: var(--secondary-color); color: #000; }
+body.high-contrast .main-header { border-bottom: 2px solid var(--secondary-color); }
 
 .container {
-    max-width: 1100px;
+    max-width: 1200px; /* Increased slightly for modern look */
     margin: 0 auto;
     padding: 0 20px;
 }
 
-/* Header */
-.site-header {
-    background: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 1rem 0;
-    border-bottom: 3px solid var(--primary-color);
+/* =========================================
+   3. NEW HEADER & NAVIGATION
+   ========================================= */
+
+/* Top Accessibility Bar */
+.accessibility-bar {
+    background-color: var(--bg-color);
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1100;
 }
-.site-header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+
+/* Accessibility Buttons (Pill Shape) */
+.btn-access {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
 }
-.logo a {
-    font-size: 1.5rem;
-    font-weight: bold;
+.btn-access:hover { background-color: var(--primary-dark); }
+
+/* Main Header Container */
+.main-header {
+    background-color: var(--nav-bg);
+    padding: 15px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 54px;
+    z-index: 1000; /* Keeps nav on top when scrolling */
+}
+
+/* Logo */
+.logo-text {
+    font-size: 1.6rem;
+    font-weight: 800;
     color: var(--primary-color);
     text-decoration: none;
+    letter-spacing: -0.5px;
 }
-.main-nav ul {
+
+/* Centered Navigation Menu */
+.nav-center .nav-links {
+    display: flex;
+    list-style: none;
     margin: 0;
     padding: 0;
-    list-style: none;
-    display: flex;
-    gap: 20px;
+    gap: 8px;
 }
-.main-nav a {
+
+/* Navigation Pills (The White "Active" Effect) */
+.nav-pill {
     text-decoration: none;
     color: var(--dark-gray);
-    font-weight: 600;
-    padding: 5px 0;
-    border-bottom: 2px solid transparent;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 500;
     transition: all 0.3s ease;
 }
-.main-nav a:hover, .main-nav a.active {
-    color: var(--primary-color);
-    border-bottom-color: var(--primary-color);
-}
-.header-actions { display: flex; align-items: center; gap: 10px; }
 
-/* Buttons */
+.nav-pill:hover {
+    background-color: rgba(0, 90, 156, 0.08); /* Subtle primary tint */
+    color: var(--primary-color);
+}
+
+.nav-pill.active {
+    background-color: white;
+    color: var(--primary-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    font-weight: 700;
+}
+
+/* Auth Buttons (Right Side) */
+.auth-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.btn-login {
+    text-decoration: none;
+    color: var(--dark-gray);
+    margin-right: 15px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.btn-login:hover { color: var(--primary-color); }
+
+.btn-signup {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+}
+.btn-signup:hover { background-color: var(--primary-dark); }
+
+
+/* =========================================
+   4. NEW HERO SECTION
+   ========================================= */
+.hero-wrapper {
+    /* Modern Gradient Background */
+    background: linear-gradient(100deg, #d97d3e 0%, #b86e48 40%, #3e7caf 100%);
+    color: white;
+    padding: 80px 0;
+    border-radius: 0; /* Full width */
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden; /* Clips the image if it overflows */
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+}
+
+.hero-content {
+    max-width: 50%;
+    position: relative;
+    z-index: 2; /* Text sits on top of image */
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    margin-top: 0;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.hero-subtitle {
+    font-size: 1.35rem;
+    margin-bottom: 35px;
+    opacity: 0.95;
+    font-weight: 400;
+}
+
+/* Hero Button */
+.btn-hero {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 16px 32px;
+    border-radius: 50px; /* Fully round pill */
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: 2px solid rgba(255,255,255,0.3);
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+}
+.btn-hero:hover {
+    transform: translateY(-2px);
+    background-color: var(--primary-dark);
+    border-color: white;
+}
+
+/* The Illustration */
+.hero-image {
+    position: absolute;
+    right: 5%;
+    bottom: -10px; /* Anchor to bottom */
+    max-height: 95%;
+    width: auto;
+    z-index: 1;
+    pointer-events: none; /* Allows clicking through if needed */
+}
+
+/* Mobile Responsiveness for Hero */
+@media (max-width: 768px) {
+    .hero-wrapper { text-align: center; justify-content: center; padding: 40px 0; }
+    .hero-content { max-width: 100%; padding: 0 20px; }
+    .hero-image { display: none; /* Hide image on small screens to save space */ }
+    .hero-title { font-size: 2.5rem; }
+    .nav-center .nav-links { display: none; /* You might want a hamburger menu here later */ }
+}
+
+
+/* =========================================
+   5. GENERAL UI (Buttons, Forms, Cards)
+   ========================================= */
+
+/* Standard Buttons */
 .btn, .btn-secondary {
     display: inline-block;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 6px;
     text-decoration: none;
     font-weight: bold;
     border: none;
@@ -85,7 +253,7 @@ body.high-contrast a { color: var(--secondary-color); }
     transition: background-color 0.3s ease;
 }
 .btn { background-color: var(--primary-color); color: #fff; }
-.btn:hover { background-color: #004a80; }
+.btn:hover { background-color: var(--primary-dark); }
 .btn-secondary { background-color: var(--light-gray); color: var(--text-color); }
 .btn-secondary:hover { background-color: #ddd; }
 
@@ -95,153 +263,119 @@ body.high-contrast a { color: var(--secondary-color); }
     padding: 12px;
     margin-bottom: 1rem;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 6px;
     box-sizing: border-box;
+    font-family: inherit;
 }
 .auth-form p, .contact-form p { margin: 0 0 1rem 0; }
 
-/* Main Content */
-main { padding: 2rem 0; }
-
-/* Hero Section */
-.hero {
-    background-color: var(--primary-color);
-    color: #fff;
-    padding: 4rem 2rem;
-    text-align: center;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-}
-.hero h1 { font-size: 2.5rem; margin-top: 0; }
-
 /* Resource Cards */
-.resource-list { display: grid; gap: 1.5rem; }
+.resource-list { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
 .resource-card {
     background: #fff;
     padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     border-left: 5px solid var(--secondary-color);
+    transition: transform 0.2s;
 }
+.resource-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
 .category-tag {
     display: inline-block;
     background: var(--light-gray);
-    padding: 5px 10px;
-    border-radius: 15px;
+    padding: 5px 12px;
+    border-radius: 20px;
     font-size: 0.8rem;
-    font-weight: bold;
+    font-weight: 700;
+    color: var(--dark-gray);
     margin-bottom: 1rem;
-}
-
-/* Accessibility Toolbar */
-.accessibility-toolbar {
-    background: var(--dark-gray);
-    padding: 10px;
-    text-align: center;
-}
-.accessibility-toolbar button {
-    background: var(--light-gray);
-    color: var(--text-color);
-    border: none;
-    padding: 8px 15px;
-    margin: 0 5px;
-    cursor: pointer;
-    border-radius: 5px;
 }
 
 /* Messages */
 .messages { margin-bottom: 1.5rem; }
-.message {
-    padding: 1rem;
-    border-radius: 5px;
-    color: #fff;
-}
+.message { padding: 1rem; border-radius: 6px; color: #fff; font-weight: 600; }
 .message.success { background-color: #28a745; }
 .message.error { background-color: #dc3545; }
 
-/* Skip Link */
+/* Skip Link (Accessibility) */
 .skip-link {
     position: absolute;
-    top: -40px;
-    left: 0;
+    top: -50px;
+    left: 10px;
     background: var(--secondary-color);
     color: #000;
-    padding: 8px;
-    z-index: 100;
+    padding: 10px 20px;
+    z-index: 1000;
     transition: top 0.3s;
+    font-weight: bold;
+    border-radius: 0 0 5px 5px;
 }
-.skip-link:focus { top: 10px; left: 10px; }
+.skip-link:focus { top: 0; }
 
-/* ========================================
-   ISL (Indian Sign Language) Popup Modal
-   ======================================== */
 
-/* The modal background (hidden by default) */
+/* =========================================
+   6. ISL POPUP MODAL (Preserved)
+   ========================================= */
 .isl-popup {
     display: none; 
-    position: fixed; /* Stays in place even when scrolling */
-    z-index: 1000; /* Sits on top of everything else */
+    position: fixed; 
+    z-index: 2000; 
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.6); 
+    backdrop-filter: blur(3px); /* Added blur for better focus */
 }
 
-/* Modal Content Box */
 .isl-popup-content {
     background-color: #fefefe;
-    color: #333; /* Dark text for light background */
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
+    color: #333;
+    margin: 10% auto; 
+    padding: 30px;
     border: 1px solid #888;
-    width: 80%; /* Could be more specific, e.g., 600px */
-    max-width: 640px; /* Max width for the video player */
-    border-radius: 8px;
+    width: 80%; 
+    max-width: 700px;
+    border-radius: 12px;
     position: relative;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
-/* The Close Button */
-/* in static/core/style.css */
-
 #isl-close-button {
-    color: #333; /* Darker color to be more visible */
+    color: #555; 
     position: absolute;
-    top: 0px; /* Move to the very top edge */
-    right: 0px; /* Move to the very right edge */
-    
-    /* Make the click target bigger */
-    font-size: 28px;
+    top: 10px; 
+    right: 15px; 
+    font-size: 32px;
     font-weight: bold;
-    padding: 10px 15px; /* Adds a large clickable padded area */
-    
+    padding: 5px 15px; 
     cursor: pointer;
-    line-height: 1; /* Keeps the 'x' centered */
+    line-height: 0.8;
+    border-radius: 50%;
+    transition: background 0.2s;
 }
 
 #isl-close-button:hover,
 #isl-close-button:focus {
-    color: #f00; /* Bright red on hover */
-    background-color: #eee; /* Light gray background on hover */
+    color: #d32f2f; 
+    background-color: #f0f0f0; 
 }
 
-/* Style for the transcription text */
 #isl-transcription {
-    margin-top: 15px;
-    font-size: 1.1em;
-    color: #555;
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #444;
     text-align: center;
+    line-height: 1.5;
 }
-/* Highlight style for the active ISL word or letter */
+
 .isl-active-text {
-    background-color: #ffeb3b; /* Bright Yellow */
-    color: #000; /* Black Text */
+    background-color: #fff176; /* Softer Yellow */
+    color: #000; 
     font-weight: bold;
-    padding: 2px 4px;
+    padding: 2px 6px;
     border-radius: 4px;
-    border-bottom: 2px solid #fbc02d;
-    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 0 #fdd835;
 }

@@ -39,6 +39,9 @@ class NewsArticle(models.Model):
     content = models.TextField()
     published_date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    # --- ADD THESE TWO FIELDS ---
+    source_url = models.URLField(max_length=500, unique=True, null=True, blank=True)
+    is_approved = models.BooleanField(default=False) 
 
     class Meta:
         ordering = ['-published_date']
