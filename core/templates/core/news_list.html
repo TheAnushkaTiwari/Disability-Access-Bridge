@@ -1,27 +1,39 @@
 {% extends 'core/base.html' %}
 
-{% block title %}News & Announcements{% endblock %}
+{% block title %}Latest News - Disability Access Bridge{% endblock %}
 
 {% block content %}
-    <h1>News & Announcements</h1>
-    <div class="news-list-full">
-        {% for article in news_list %}
-            <article class="news-item">
-                <h2><a href="{% url 'news_detail' article.pk %}">{{ article.title }}</a></h2>
-                <p class="meta">Published on {{ article.published_date|date:"F d, Y" }}</p>
-                <p>{{ article.content|truncatewords:50 }}</p>
+<div class="container" style="padding-top: 4rem; padding-bottom: 4rem;">
+    
+    <h1 style="margin-bottom: 10px;">Latest News & Announcements</h1>
+    <p style="margin-bottom: 30px; color: #666;">Stay updated with the latest disability rights news, policies, and events in Rajasthan.</p>
 
-                {% if article.source_url %}
-                    <p style="margin-top: 5px; font-size: 0.9rem;">
-                        <strong>Source:</strong> 
-                        <a href="{{ article.source_url }}" target="_blank" rel="noopener noreferrer" style="color: #0056b3; text-decoration: underline;">
-                            Read original article
-                        </a>
-                    </p>
-                {% endif %}
-                </article>
+    <div class="resource-list-vertical">
+        {% for article in news_list %}
+            
+            <div class="resource-card-vertical" onclick="window.location.href='{% url 'news_detail' article.id %}';" style="border-left-color: var(--primary-color);">
+                
+                <span class="category-badge" style="background-color: #eef4f8; color: var(--primary-color);">
+                    📅 {{ article.published_date|date:"F d, Y" }}
+                </span>
+                
+                <h3 class="resource-title">
+                    <a href="{% url 'news_detail' article.id %}">{{ article.title }}</a>
+                </h3>
+                
+                <p class="short-desc">{{ article.content|truncatewords:30 }}</p>
+                
+                <small class="expand-hint" style="color: var(--primary-color); display: block; margin-top: 15px;">
+                    Read Full Article &rarr;
+                </small>
+            </div>
+            
         {% empty %}
-            <p>No news to display.</p>
+            <div class="message error">
+                No news articles have been published yet. Please check back later!
+            </div>
         {% endfor %}
     </div>
+
+</div>
 {% endblock %}

@@ -1,6 +1,3 @@
-/* =========================================
-   1. VARIABLES & RESET
-   ========================================= */
 :root {
     /* Brand Colors */
     --primary-color: #005A9C;
@@ -27,9 +24,7 @@ body {
     line-height: 1.6;
 }
 
-/* =========================================
-   2. HIGH CONTRAST MODE (Preserved)
-   ========================================= */
+/*HIGH CONTRAST MODE*/
 body.high-contrast {
     --primary-color: #000;
     --primary-dark: #333;
@@ -51,9 +46,6 @@ body.high-contrast .main-header { border-bottom: 2px solid var(--secondary-color
     padding: 0 20px;
 }
 
-/* =========================================
-   3. NEW HEADER & NAVIGATION
-   ========================================= */
 
 /* Top Accessibility Bar */
 .accessibility-bar {
@@ -107,7 +99,7 @@ body.high-contrast .main-header { border-bottom: 2px solid var(--secondary-color
     gap: 8px;
 }
 
-/* Navigation Pills (The White "Active" Effect) */
+/* Navigation Pills*/
 .nav-pill {
     text-decoration: none;
     color: var(--dark-gray);
@@ -157,9 +149,7 @@ body.high-contrast .main-header { border-bottom: 2px solid var(--secondary-color
 .btn-signup:hover { background-color: var(--primary-dark); }
 
 
-/* =========================================
-   4. NEW HERO SECTION
-   ========================================= */
+/*NEW HERO SECTION*/
 .hero-wrapper {
     /* Modern Gradient Background */
     background: linear-gradient(100deg, #d97d3e 0%, #b86e48 40%, #3e7caf 100%);
@@ -391,9 +381,7 @@ body.high-contrast .main-header { border-bottom: 2px solid var(--secondary-color
 .skip-link:focus { top: 0; }
 
 
-/* =========================================
-   6. ISL POPUP MODAL (Preserved)
-   ========================================= */
+/*ISL POPUP MODAL (Preserved)*/
 .isl-popup {
     display: none; 
     position: fixed; 
@@ -455,4 +443,65 @@ body.high-contrast .main-header { border-bottom: 2px solid var(--secondary-color
     padding: 2px 6px;
     border-radius: 4px;
     box-shadow: 0 2px 0 #fdd835;
+}
+
+/* =========================================
+   7. HOME PAGE FEATURES GRID (Side-by-Side)
+   ========================================= */
+.features-grid {
+    display: grid;
+    /* This automatically puts them side-by-side and wraps on small screens */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.feature-card {
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    text-align: center;
+    border-top: 5px solid var(--secondary-color); /* Yellow top border */
+    transition: transform 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Make the middle card have a blue border instead of yellow */
+.feature-card:nth-child(2) {
+    border-top-color: var(--primary-color);
+}
+
+/* =========================================
+   8. COMMUNITY FORUM POST CARDS
+   ========================================= */
+.forum-post-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-left: 5px solid var(--secondary-color); /* Yellow left border */
+    margin-bottom: 20px;
+}
+
+.forum-post-header {
+    font-weight: bold;
+    color: var(--text-color);
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.forum-post-date {
+    color: #777;
+    font-weight: normal;
+    font-size: 0.85rem;
+    margin-left: 5px;
+}
+
+.forum-post-content {
+    color: #444;
+    line-height: 1.6;
 }

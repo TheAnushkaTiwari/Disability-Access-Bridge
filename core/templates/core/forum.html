@@ -23,11 +23,16 @@
 
 <div class="forum-messages">
     {% for post in posts %}
-        <div class="resource-card"> <p><strong>{{ post.author.username }}</strong> <small class="dark-gray">{{ post.created_at|timesince }} ago</small></p>
-            <p>{{ post.content }}</p>
+    <div class="forum-post-card">
+        <div class="forum-post-header">
+            {{ post.author.username }} 
+            <span class="forum-post-date">{{ post.created_at|timesince }} ago</span>
         </div>
-    {% empty %}
-        <p>No messages yet. Be the first to start the conversation!</p>
-    {% endfor %}
-</div>
+        <div class="forum-post-content">
+            {{ post.content }}
+        </div>
+    </div>
+{% empty %}
+    <p>No posts yet. Be the first to start the conversation!</p>
+{% endfor %}
 {% endblock %}

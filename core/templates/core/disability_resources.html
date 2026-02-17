@@ -1,22 +1,104 @@
 {% extends 'core/base.html' %}
 
-{% block title %}{{ disability.name }} Resources{% endblock %}
+{% block title %}{{ disability.name }} Resources - Disability Access Bridge{% endblock %}
 
 {% block content %}
-    <h1>{{ disability.name }} Resources</h1>
-    <p>Resources specifically curated for {{ disability.name }}.</p>
+<div class="container" style="padding-top: 4rem; padding-bottom: 4rem;">
+    
+    <h1 style="margin-bottom: 10px;">{{ disability.name }} Resources</h1>
+    <p style="margin-bottom: 30px; color: #666;">Resources specifically curated for {{ disability.name }}.</p>
 
-    <div class="resource-list">
-        {% for resource in resources %}
-            <div class="resource-card">
-                <h3>{{ resource.title }}</h3>
-                <span class="category-tag">{{ resource.category.name }}</span>
-                <p>{{ resource.description }}</p>
-                {% if resource.contact_info %}<p><strong>Contact:</strong> {{ resource.contact_info }}</p>{% endif %}
-                {% if resource.website_url %}<p><a href="{{ resource.website_url }}" target="_blank" rel="noopener noreferrer">Visit Website</a></p>{% endif %}
+    <div class="filter-controls">
+        <form method="get" action="{% url 'resources' %}" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <input type="text" name="q" placeholder="Search resources..." value="{{ query }}" class="form-input" style="flex: 2; min-width: 200px; margin-bottom: 0;">
+            
+            <select name="category" class="form-input" style="flex: 1; min-width: 150px; margin-bottom: 0;">
+                <option value="">All Categories</option>
+                {% for category in ALL_CATEGORIES %}
+                    <option value="{{ category.id }}">
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            
+            <button type="submit" class="btn">Search</button>
+        </form>
+
+        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+            <label for="disability-select" style="font-weight: bold; margin-right: 10px;">Filter by Disability:</label>
+            <select id="disability-select" class="form-input" style="width: auto; display: inline-block; margin: 0;" onchange="location = this.value;">
+                <option value="">Select a Disability</option>
+                <option value="{% url 'resources' %}">All Disabilities (Clear Filter)</option>
+                {% for d in all_disabilities %}
+                    <option value="{% url 'disability_resources' disability_name=d.name|slugify %}" {% if d.id == disability.id %}selected{% endif %}>
+                        {{ d.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    
+    <div class="resource-list-vertical">
+        {% for item in resources %}
+            <div class="resource-card-vertical" onclick="toggleCard(this)">
+                
+                <span class="category-badge">{{ item.category.name }}</span>
+                
+                <h3 class="resource-title">
+                    {% if item.website_url %}
+                        <a href="{{ item.website_url }}" target="_blank" onclick="event.stopPropagation();" title="Go to Website">
+                            {{ item.title }} <span style="font-size: 0.8em;">🔗</span>
+                        </a>
+                    {% else %}
+                        {{ item.title }}
+                    {% endif %}
+                </h3>
+                
+                <p class="short-desc">{{ item.description|truncatewords:25 }}</p>
+                
+                <div class="extra-details" style="display: none;">
+                    <h4 style="margin-top: 0;">Full Description:</h4>
+                    <p>{{ item.description }}</p>
+                    
+                    {% if item.contact_info %}
+                        <div style="margin-top: 15px;">
+                            <strong>📞 Contact Info:</strong>
+                            <p style="margin: 5px 0;">{{ item.contact_info|linebreaksbr }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <small class="expand-hint">+ Click to view details</small>
             </div>
         {% empty %}
-            <p>No resources found for this disability at the moment.</p>
+            <div class="message error">
+                No resources found for this specific disability category yet.
+            </div>
         {% endfor %}
     </div>
+
+</div>
+
+<script>
+    function toggleCard(cardElement) {
+        const details = cardElement.querySelector('.extra-details');
+        const hint = cardElement.querySelector('.expand-hint');
+        const shortDesc = cardElement.querySelector('.short-desc');
+        
+        if (details.style.display === 'none') {
+            details.style.display = 'block';
+            shortDesc.style.display = 'none'; 
+            hint.innerText = '- Click to collapse';
+            hint.style.color = '#333';
+            cardElement.classList.add('expanded');
+        } else {
+            details.style.display = 'none';
+            shortDesc.style.display = 'block'; 
+            hint.innerText = '+ Click to view details';
+            hint.style.color = ''; 
+            cardElement.classList.remove('expanded');
+        }
+    }
+</script>
+
 {% endblock %}
