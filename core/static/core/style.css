@@ -236,11 +236,6 @@ body.high-contrast .main-header { border-bottom: 2px solid var(--secondary-color
     .nav-center .nav-links { display: none; /* You might want a hamburger menu here later */ }
 }
 
-
-/* =========================================
-   5. GENERAL UI (Buttons, Forms, Cards)
-   ========================================= */
-
 /* Standard Buttons */
 .btn, .btn-secondary {
     display: inline-block;
@@ -269,18 +264,100 @@ body.high-contrast .main-header { border-bottom: 2px solid var(--secondary-color
 }
 .auth-form p, .contact-form p { margin: 0 0 1rem 0; }
 
-/* Resource Cards */
-.resource-list { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
-.resource-card {
-    background: #fff;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    border-left: 5px solid var(--secondary-color);
-    transition: transform 0.2s;
-}
-.resource-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+/* --- Resource Page Layout --- */
 
+/* 1. Spacing for the Filter Section */
+.filter-controls {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 40px; /* Adds space between filters and the first card */
+    border: 1px solid #eee;
+}
+
+/* 2. The Vertical List Container */
+.resource-list-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between each card */
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* 3. The Card Design (The Look You Want) */
+.resource-card-vertical {
+    background: #fff;       /* White background */
+    padding: 25px;          /* Breathing room inside the card */
+    border-radius: 10px;    /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Soft shadow */
+    border-left: 6px solid var(--secondary-color); /* Yellow left border like your reference */
+    cursor: pointer;        /* Shows hand cursor */
+    transition: all 0.2s ease;
+    position: relative;     /* For positioning elements */
+}
+
+/* Hover Effect */
+.resource-card-vertical:hover {
+    transform: translateY(-3px); /* Moves up slightly */
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1); /* Shadow grows */
+    border-left-color: var(--primary-color); /* Border turns blue on hover */
+}
+
+/* 4. Elements Inside the Card */
+.category-badge {
+    display: inline-block;
+    background-color: #eee;
+    color: #555;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.resource-title {
+    margin: 0 0 10px 0;
+    font-size: 1.4rem;
+    color: var(--text-color);
+}
+
+/* The Link inside the Title */
+.resource-title a {
+    text-decoration: none;
+    color: #0056b3; /* Link Blue */
+    transition: color 0.2s;
+}
+
+.resource-title a:hover {
+    text-decoration: underline;
+    color: #003d82;
+}
+
+.short-desc {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* The "Click to Read More" Text */
+.expand-hint {
+    display: block;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* 5. Expanded State (Hidden Details) */
+.extra-details {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    background-color: #fafbfc; /* Light gray background for details */
+    padding: 15px;
+    border-radius: 8px;
+}
 .category-tag {
     display: inline-block;
     background: var(--light-gray);
