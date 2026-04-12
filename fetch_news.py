@@ -18,7 +18,7 @@ def fetch_and_save_news():
 
     print("Searching for latest disability news in India...")
     
-    # 1. Check Tavily Results
+    #check Tavily Results
     try:
         search_result = tavily.search(query="latest news disability accessibility India Rajasthan 2026", search_depth="advanced", max_results=5)
         print(f"### DEBUG: Tavily found {len(search_result.get('results', []))} results.")
@@ -33,7 +33,7 @@ def fetch_and_save_news():
     Each item in the list must have keys: "title", "content", "url".
     """
     
-    # 2. Check Groq Response
+    #check Groq Response
     try:
         completion = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
@@ -48,7 +48,7 @@ def fetch_and_save_news():
         print(f"Error communicating with Groq: {e}")
         return
 
-    # 3. Parse and Save
+    #parsing and saving
     articles = data.get('articles', data.get('news', []))
     
     if not articles:

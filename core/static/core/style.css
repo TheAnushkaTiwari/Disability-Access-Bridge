@@ -505,3 +505,149 @@ body.high-contrast .main-header { border-bottom: 2px solid var(--secondary-color
     color: #444;
     line-height: 1.6;
 }
+
+/* =========================================
+   9. RAG CHATBOT UI
+   ========================================= */
+/* Floating Button */
+.chat-floating-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1.8rem;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 9999;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.chat-floating-btn:hover {
+    transform: scale(1.05);
+    background-color: var(--primary-dark);
+}
+
+/* Chat Panel (Hidden off-screen to the right by default) */
+.chat-panel {
+    position: fixed;
+    bottom: 0;
+    right: -450px; /* Hidden state */
+    width: 400px;
+    height: 85vh; /* Takes up most of the screen height */
+    max-height: 800px;
+    background-color: #fff;
+    border-radius: 12px 0 0 0; /* Rounded top-left corner */
+    box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Class added by JS to slide it in */
+.chat-panel.open {
+    right: 0;
+}
+
+/* FULLSCREEN MODIFIER */
+.chat-panel.fullscreen {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    z-index: 100000; /* Over everything */
+}
+
+/* Header */
+.chat-header {
+    background-color: var(--primary-color);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px 0 0 0;
+}
+
+.chat-panel.fullscreen .chat-header {
+    border-radius: 0;
+}
+
+.chat-header-controls button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: opacity 0.2s;
+}
+.chat-header-controls button:hover { opacity: 0.7; }
+
+/* Chat Log Area */
+.chat-log {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.chat-message {
+    max-width: 85%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    line-height: 1.5;
+}
+
+.bot-message {
+    background-color: #fff;
+    border: 1px solid #eee;
+    align-self: flex-start;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.user-message {
+    background-color: #eef4f8; /* Light primary tint */
+    align-self: flex-end;
+}
+
+/* Input Area */
+.chat-input-area {
+    padding: 15px;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#chat-text-input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 1rem;
+}
+
+.chat-action-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    transition: background-color 0.2s;
+}
+.chat-action-btn:hover { background-color: var(--primary-dark); }

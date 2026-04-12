@@ -108,6 +108,49 @@
         }
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+ 
+    <button id="chat-toggle-btn" 
+        class="chat-floating-btn" 
+        aria-expanded="false" 
+        aria-controls="chat-panel" 
+        aria-label="Open AI Scheme Assistant">
+    💬
+</button>
+
+<div id="chat-panel" 
+     class="chat-panel" 
+     role="dialog" 
+     aria-modal="false" 
+     aria-labelledby="chat-title" 
+     hidden>
     
+    <div class="chat-header">
+        <h2 id="chat-title" style="margin: 0; font-size: 1.2rem; color: white;">AI Scheme Assistant</h2>
+        <div class="chat-header-controls">
+            <button id="chat-fullscreen-btn" aria-label="Toggle Fullscreen" title="Fullscreen">⛶</button>
+            <button id="chat-close-btn" aria-label="Close Chat" title="Close">✖</button>
+        </div>
+    </div>
+
+    <div id="chat-log" class="chat-log" aria-live="polite" aria-relevant="additions">
+        <div class="chat-message bot-message">
+            Hi! I am the AI Scheme Assistant. Upload a government scheme PDF, and I can answer your questions about it!
+        </div>
+    </div>
+
+    <div class="chat-input-area">
+        <input type="file" id="chat-pdf-upload" accept=".pdf" style="display: none;" aria-label="Upload PDF document">
+        
+        <button id="chat-upload-btn" class="chat-action-btn" aria-label="Select PDF to upload" title="Upload PDF">
+            📎
+        </button>
+        
+        <input type="text" id="chat-text-input" placeholder="Ask about the scheme..." aria-label="Type your message here">
+        
+        <button id="chat-send-btn" class="chat-action-btn" aria-label="Send message">
+            ➤
+        </button>
+    </div>
+</div>
 </body>
 </html>

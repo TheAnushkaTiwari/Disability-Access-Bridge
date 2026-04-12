@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from groq import Groq
 from tavily import TavilyClient
 
-#Setup Django
+#setup Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'disability_bridge.settings')
 django.setup()
 
@@ -17,12 +17,11 @@ def fetch_and_save_resources():
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
     tavily = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
 
-    # --- SETTINGS: CHANGE THESE AS NEEDED ---
-    SEARCH_QUERY = "Free vocational training centers for disabled in Rajasthan"
-    TARGET_CATEGORY_NAME = "Education & Training" 
-    # ----------------------------------------
+    # settings: change as needed
+    SEARCH_QUERY = "Free vocational training centers for intellectually disabled in Rajasthan"
+    TARGET_CATEGORY_NAME = "All" 
 
-    #Get or Create the Category
+    #get or Create the Category
     #ensures this category exists before adding resources to it
     category_obj, created = Category.objects.get_or_create(name=TARGET_CATEGORY_NAME)
     if created:
@@ -30,14 +29,14 @@ def fetch_and_save_resources():
 
     print(f"Searching for: {SEARCH_QUERY}...")
     
-    #Search the Web
+    #search the Web
     try:
         search_result = tavily.search(query=SEARCH_QUERY, search_depth="advanced", max_results=5)
     except Exception as e:
         print(f"Search Error: {e}")
         return
 
-    #Ask AI to Format Data
+    #Ask AI(Groq) to Format Data
     prompt = f"""
     Based on these search results: {search_result}
     Extract 3 distinct resources (organizations, centers, or websites).
@@ -60,14 +59,14 @@ def fetch_and_save_resources():
         print(f"AI/Parsing Error: {e}")
         return
 
-    # Save to Database
+    # save to dB
     resources_list = data.get('resources', [])
     
     for item in resources_list:
-        # Use 'website_url' to check for duplicates
+        #use 'website_url' to check for duplicates
         url_to_check = item.get('website_url', '')
         
-        # Only check duplicate if URL exists, otherwise check Title
+        #only check duplicate if URL exists, otherwise check Title
         is_duplicate = False
         if url_to_check:
             if Resource.objects.filter(website_url=url_to_check).exists():
@@ -77,14 +76,14 @@ def fetch_and_save_resources():
                 is_duplicate = True
 
         if not is_duplicate:
-            # Create resource
+            #create resource
             Resource.objects.create(
                 title=item.get('title'),
                 description=item.get('description', ''),
                 website_url=url_to_check,
                 contact_info=item.get('contact_info', ''),
-                category=category_obj,  # Link to the category found/created
-                is_verified=False       # Force to False so it's a draft
+                category=category_obj,  #link to the category found/created
+                is_verified=False       #force to False so it's a draft
             )
             print(f"SUCCESS: Drafted '{item.get('title')}'")
         else:

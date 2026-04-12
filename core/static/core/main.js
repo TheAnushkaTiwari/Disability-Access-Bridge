@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     
-    // --- Accessibility Toolbar (Standard Code) ---
+    //accessibility toolbar
     const body = document.getElementById('page-body');
     const contrastToggle = document.getElementById('contrast-toggle');
     const fontIncrease = document.getElementById('font-increase');
@@ -34,8 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- 🚀 SPEECH-TO-ISL WITH KARAOKE HIGHLIGHTING ---
-
+    //SPEECH-TO-ISL WITH KARAOKE HIGHLIGHTING
     const islButton = document.getElementById("isl-button");
     const islModal = document.getElementById("isl-modal");
     const islCloseButton = document.getElementById("isl-close-button");
@@ -52,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const recognition = new SpeechRecognition();
     recognition.lang = 'en-IN';
 
-    // --- DICTIONARIES ---
+    //DICTIONARIES
     const islWordMap = {
         "hello": "Hello.mp4", "help": "Help.mp4", "thank you": "Thank You.mp4",
         "bye": "Bye.mp4", "can": "Can.mp4", "from": "From.mp4",
@@ -69,12 +68,11 @@ document.addEventListener('DOMContentLoaded', function() {
         'y': 'Y.mp4', 'z': 'Z.mp4'
     };
 
-    // --- QUEUE SYSTEM ---
-    // This now stores Objects: { video: 'path', spanId: 'html-id' }
+    //this now stores Objects: { video:'path',spanId:'html-id' }
     let playQueue = []; 
 
     function playNextItem() {
-        // 1. Remove ALL previous highlights
+        // remove ALL previous highlights
         document.querySelectorAll('.isl-active-text').forEach(el => {
             el.classList.remove('isl-active-text');
         });
@@ -82,13 +80,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (playQueue.length > 0) {
             const currentItem = playQueue.shift(); // Get next item
             
-            // 2. Highlight the specific text for this video
+            //highlight the specific text for this video
             const textSpan = document.getElementById(currentItem.spanId);
             if (textSpan) {
                 textSpan.classList.add('isl-active-text');
             }
 
-            // 3. Play the video
+            //play the video
             islVideoPlayer.src = window.STATIC_ISL_PATH + currentItem.video;
             islVideoPlayer.play();
         }
@@ -106,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- MAIN LOGIC ---
+    //MAIN LOGIC
 
     islButton.addEventListener("click", () => {
         islButton.textContent = "Listening...";
@@ -117,57 +115,57 @@ document.addEventListener('DOMContentLoaded', function() {
     recognition.onresult = function(event) {
         const transcript = event.results[0][0].transcript.toLowerCase().trim();
         
-        // Reset the display area
+        //reset the display area
         islTranscription.innerHTML = "You said: "; 
         
         const words = transcript.split(" ");
 
-        // Loop through each word to build HTML and Queue
+        //loop through each word to build HTML and Queue
         words.forEach((word, wordIndex) => {
             
-            // Create a unique ID base for this word
+            //create a unique ID base for this word
             const wordId = `word-${wordIndex}`;
 
-            // CHECK 1: Whole Word Match (e.g., "hello")
+            // CHECK1:Whole Word Match (eg"hello")
             if (islWordMap[word]) {
-                // Create a span for the whole word
+                //create a span for the whole word
                 const span = document.createElement('span');
                 span.id = wordId;
-                span.innerText = word + " "; // Add space
+                span.innerText = word + " "; //added space
                 islTranscription.appendChild(span);
 
-                // Add to Queue
+                //add to Queue
                 playQueue.push({
                     video: islWordMap[word],
                     spanId: wordId
                 });
             } 
             
-            // CHECK 2: Fingerspelling (e.g., "anushka")
+            //CHECK2:fingerspelling (eg"anushka")
             else {
-                // Create a container for the word
+                //create a container for the word
                 const wordContainer = document.createElement('span');
-                wordContainer.style.whiteSpace = "nowrap"; // Keep letters together
+                wordContainer.style.whiteSpace = "nowrap"; //keep letters together
                 
-                // Loop through letters
+                //loop through letters
                 for (let i = 0; i < word.length; i++) {
                     const letter = word[i];
                     
                     if (islAlphabetMap[letter]) {
-                        // Create a span for JUST this letter
+                        //create a span for JUST this letter
                         const letterSpan = document.createElement('span');
                         letterSpan.id = `${wordId}-char-${i}`; // Unique ID
                         letterSpan.innerText = letter;
                         wordContainer.appendChild(letterSpan);
 
-                        // Add to Queue (Highlight this specific letter)
+                        //add to Queue (Highlight this specific letter)
                         playQueue.push({
                             video: islAlphabetMap[letter],
                             spanId: `${wordId}-char-${i}`
                         });
                     }
                 }
-                // Add a space after the fingerspelled word
+                //add a space after the fingerspelled word
                 const spaceSpan = document.createElement('span');
                 spaceSpan.innerText = " ";
                 wordContainer.appendChild(spaceSpan);
@@ -191,4 +189,72 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Speech error:", event.error);
         islButton.textContent = "Speak (ISL)";
     };
+});
+
+// RAG Chatbot code
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('chat-toggle-btn');
+    const closeBtn = document.getElementById('chat-close-btn');
+    const fullscreenBtn = document.getElementById('chat-fullscreen-btn');
+    const chatPanel = document.getElementById('chat-panel');
+    const textInput = document.getElementById('chat-text-input');
+    const uploadBtn = document.getElementById('chat-upload-btn');
+    const pdfUploadInput = document.getElementById('chat-pdf-upload');
+
+    // 1. Open/Close Logic
+    function toggleChat() {
+        const isOpen = chatPanel.classList.contains('open');
+        
+        if (isOpen) {
+            // CLOSE CHAT
+            chatPanel.classList.remove('open');
+            
+            // BUG FIX: Ensure fullscreen is removed when closing!
+            chatPanel.classList.remove('fullscreen');
+            fullscreenBtn.innerText = '⛶'; 
+            
+            chatPanel.setAttribute('hidden', 'true');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            chatPanel.setAttribute('aria-modal', 'false');
+            toggleBtn.focus(); 
+        } else {
+            // OPEN CHAT
+            chatPanel.classList.add('open');
+            chatPanel.removeAttribute('hidden');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+            textInput.focus(); 
+        }
+    }
+
+    // 2. Fullscreen Logic
+    function toggleFullscreen() {
+        chatPanel.classList.toggle('fullscreen');
+        const isFullscreen = chatPanel.classList.contains('fullscreen');
+        chatPanel.setAttribute('aria-modal', isFullscreen ? 'true' : 'false');
+        
+        fullscreenBtn.innerText = isFullscreen ? '🗗' : '⛶'; 
+        textInput.focus();
+    }
+
+    // Event Listeners
+    toggleBtn.addEventListener('click', toggleChat);
+    closeBtn.addEventListener('click', toggleChat);
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    uploadBtn.addEventListener('click', () => {
+        pdfUploadInput.click();
+    });
+
+    // 3. SMARTER WCAG Escape Key Listener
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && chatPanel.classList.contains('open')) {
+            // If it's fullscreen, just exit fullscreen first
+            if (chatPanel.classList.contains('fullscreen')) {
+                toggleFullscreen();
+            } else {
+                // If it's a normal side-panel, close it completely
+                toggleChat();
+            }
+        }
+    });
 });
