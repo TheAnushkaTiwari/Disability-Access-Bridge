@@ -1,6 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
-    
-    //accessibility toolbar
+console.log("🚀 THE NEW CODE IS DEFINITELY RUNNING!");
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("✅ Main JS Loaded and Ready!");
+
+    // =========================================
+    // 1. ACCESSIBILITY TOOLBAR
+    // =========================================
     const body = document.getElementById('page-body');
     const contrastToggle = document.getElementById('contrast-toggle');
     const fontIncrease = document.getElementById('font-increase');
@@ -18,23 +22,35 @@ document.addEventListener('DOMContentLoaded', function() {
         body.style.fontSize = (currentSize + step) + 'px';
     }
 
+    // TTS (Screen Reader) Fix
     if (ttsButton) {
         ttsButton.addEventListener('click', () => {
+            console.log("🔊 Speak button clicked!");
             const mainContent = document.getElementById('main-content');
             if (!mainContent) return;
+            
             const selection = window.getSelection().toString();
             const textToSpeak = selection.trim().length > 0 ? selection : mainContent.innerText;
             const synth = window.speechSynthesis;
-            if (synth.speaking) { synth.cancel(); return; }
+            
+            if (synth.speaking) { 
+                console.log("Stopping speech...");
+                synth.cancel(); 
+                return; 
+            }
+            
             if (textToSpeak) {
                 const utterance = new SpeechSynthesisUtterance(textToSpeak);
                 utterance.lang = 'en-IN';
                 synth.speak(utterance);
+                console.log("Starting speech...");
             }
         });
     }
 
-    //SPEECH-TO-ISL WITH KARAOKE HIGHLIGHTING
+    // =========================================
+    // 2. SPEECH-TO-ISL
+    // =========================================
     const islButton = document.getElementById("isl-button");
     const islModal = document.getElementById("isl-modal");
     const islCloseButton = document.getElementById("isl-close-button");
@@ -189,10 +205,12 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Speech error:", event.error);
         islButton.textContent = "Speak (ISL)";
     };
-});
 
-// RAG Chatbot code
-document.addEventListener('DOMContentLoaded', () => {
+
+    
+    // =========================================
+    // 3. RAG CHATBOT UI & API
+    // =========================================
     const toggleBtn = document.getElementById('chat-toggle-btn');
     const closeBtn = document.getElementById('chat-close-btn');
     const fullscreenBtn = document.getElementById('chat-fullscreen-btn');
@@ -200,25 +218,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const textInput = document.getElementById('chat-text-input');
     const uploadBtn = document.getElementById('chat-upload-btn');
     const pdfUploadInput = document.getElementById('chat-pdf-upload');
+    const chatLog = document.getElementById('chat-log');
+    const sendBtn = document.getElementById('chat-send-btn');
 
-    // 1. Open/Close Logic
     function toggleChat() {
+        if (!chatPanel) return;
         const isOpen = chatPanel.classList.contains('open');
         
         if (isOpen) {
-            // CLOSE CHAT
-            chatPanel.classList.remove('open');
-            
-            // BUG FIX: Ensure fullscreen is removed when closing!
-            chatPanel.classList.remove('fullscreen');
+            chatPanel.classList.remove('open', 'fullscreen'); 
             fullscreenBtn.innerText = '⛶'; 
-            
             chatPanel.setAttribute('hidden', 'true');
             toggleBtn.setAttribute('aria-expanded', 'false');
-            chatPanel.setAttribute('aria-modal', 'false');
             toggleBtn.focus(); 
         } else {
-            // OPEN CHAT
             chatPanel.classList.add('open');
             chatPanel.removeAttribute('hidden');
             toggleBtn.setAttribute('aria-expanded', 'true');
@@ -226,35 +239,138 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 2. Fullscreen Logic
-    function toggleFullscreen() {
-        chatPanel.classList.toggle('fullscreen');
-        const isFullscreen = chatPanel.classList.contains('fullscreen');
-        chatPanel.setAttribute('aria-modal', isFullscreen ? 'true' : 'false');
-        
-        fullscreenBtn.innerText = isFullscreen ? '🗗' : '⛶'; 
-        textInput.focus();
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            console.log("💬 Chat button clicked!");
+            toggleChat();
+        });
+    } else {
+        console.error("❌ Chat toggle button not found in HTML!");
     }
 
-    // Event Listeners
-    toggleBtn.addEventListener('click', toggleChat);
-    closeBtn.addEventListener('click', toggleChat);
-    fullscreenBtn.addEventListener('click', toggleFullscreen);
-
-    uploadBtn.addEventListener('click', () => {
-        pdfUploadInput.click();
+    if (closeBtn) closeBtn.addEventListener('click', toggleChat);
+    if (fullscreenBtn) fullscreenBtn.addEventListener('click', () => {
+        chatPanel.classList.toggle('fullscreen');
+        fullscreenBtn.innerText = chatPanel.classList.contains('fullscreen') ? '🗗' : '⛶'; 
+        textInput.focus();
     });
 
-    // 3. SMARTER WCAG Escape Key Listener
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && chatPanel.classList.contains('open')) {
-            // If it's fullscreen, just exit fullscreen first
-            if (chatPanel.classList.contains('fullscreen')) {
-                toggleFullscreen();
-            } else {
-                // If it's a normal side-panel, close it completely
-                toggleChat();
-            }
+        if (e.key === 'Escape' && chatPanel && chatPanel.classList.contains('open')) {
+            chatPanel.classList.contains('fullscreen') ? fullscreenBtn.click() : toggleChat();
         }
     });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    function appendMessage(sender, text) {
+        if (!chatLog) return;
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('chat-message', sender === 'user' ? 'user-message' : 'bot-message');
+        msgDiv.innerText = text;
+        chatLog.appendChild(msgDiv);
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    if (uploadBtn) uploadBtn.addEventListener('click', () => pdfUploadInput.click());
+
+    // Handle PDF Upload API
+    // =========================================
+    // FOOLPROOF PDF UPLOAD API
+    // =========================================
+    if (pdfUploadInput) {
+        // Using .onchange completely overwrites any old/duplicate ghost listeners!
+        pdfUploadInput.onchange = async function(event) {
+            console.log("📁 --- UPLOAD PROCESS STARTED ---");
+            
+            // The absolute safest way to grab the exact file
+            const file = event.target.files[0]; 
+            
+            if (!file) {
+                console.log("❌ Upload cancelled by user.");
+                return;
+            }
+
+            console.log("✅ File successfully captured:", file.name);
+            
+            // Now we know for a fact file.name exists!
+            appendMessage('bot', `Uploading and analyzing "${file.name}"... please wait.`);
+            
+            const formData = new FormData();
+            formData.append('pdf_file', file);
+
+            try {
+                const response = await fetch('/api/upload-pdf/', {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrftoken },
+                    body: formData
+                });
+                
+                const result = await response.json();
+                console.log("🖥️ Server Response:", result);
+                
+                if (result.status === 'success') {
+                    appendMessage('bot', '✅ PDF successfully processed! You can now ask me questions about it.');
+                } else {
+                    appendMessage('bot', '❌ Error processing PDF: ' + result.message);
+                }
+            } catch (error) {
+                console.error("🌐 Network error during upload:", error);
+                appendMessage('bot', '❌ Network error during upload.');
+            }
+            
+            // Clear the input 
+            event.target.value = ''; 
+        };
+    }
+
+    // =========================================
+    // SEND MESSAGE API
+    // =========================================
+    async function sendMessage() {
+        const message = textInput.value.trim();
+        if (!message) return;
+
+        appendMessage('user', message);
+        textInput.value = '';
+        
+        appendMessage('bot', 'Thinking...');
+        const typingIndicator = chatLog.lastChild;
+
+        try {
+            const response = await fetch('/api/chat/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+                body: JSON.stringify({ message: message })
+            });
+            const result = await response.json();
+            
+            chatLog.removeChild(typingIndicator);
+            appendMessage('bot', result.status === 'success' ? result.answer : '❌ Error: ' + result.message);
+        } catch (error) {
+            chatLog.removeChild(typingIndicator);
+            appendMessage('bot', '❌ Connection error. Please try again.');
+        }
+    }
+
+    if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+    if (textInput) {
+        textInput.addEventListener('keypress', (e) => { 
+            if (e.key === 'Enter') sendMessage(); 
+        });
+    }
 });

@@ -15,4 +15,8 @@ urlpatterns = [
     path('signup/', views.signup_view, name='signup'),
     path('login/', auth_views.LoginView.as_view(template_name='core/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
+    # RAG Chatbot APIs
+    path('api/upload-pdf/', views.upload_scheme_pdf, name='upload_pdf'),
+    path('api/chat/', views.chat_with_scheme, name='chat_api'),
 ]

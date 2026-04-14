@@ -1,10 +1,19 @@
+import os
+import json
+from django.http import JsonResponse
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+from .utils.rag_engine import process_and_store_pdf, ask_scheme_question
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from .models import Resource, NewsArticle, Category, Disability
 from .forms import ContactForm
+from dotenv import load_dotenv
+load_dotenv()
 
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 def home_view(request):
     latest_news = NewsArticle.objects.all()[:3]
     context = {'latest_news': latest_news}
@@ -95,3 +104,44 @@ def forum_view(request):
             return redirect('login')
 
     return render(request, 'core/forum.html', {'posts': posts})
+
+
+ #RAG chatbot views
+
+def upload_scheme_pdf(request):
+    """API endpoint to handle PDF uploads from the chatbot UI."""
+    if request.method == 'POST' and request.FILES.get('pdf_file'):
+        pdf_file = request.FILES['pdf_file']
+        
+        # Temporarily save the file so LangChain can read it
+        fs = FileSystemStorage(location=os.path.join(settings.BASE_DIR, 'media', 'temp'))
+        filename = fs.save(pdf_file.name, pdf_file)
+        file_path = fs.path(filename)
+
+        # Send it to our RAG engine
+        result = process_and_store_pdf(file_path)
+
+        # Clean up: delete the temporary PDF after FAISS extracts the text
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+        return JsonResponse(result)
+    
+    return JsonResponse({"status": "error", "message": "No file uploaded."})
+
+def chat_with_scheme(request):
+    """API endpoint to handle questions from the chatbot UI."""
+    if request.method == 'POST':
+        # Load the JSON data sent by our JavaScript
+        data = json.loads(request.body)
+        user_message = data.get('message')
+        
+        if not user_message:
+            return JsonResponse({"status": "error", "message": "No message provided."})
+
+        # Ask the RAG engine
+        result = ask_scheme_question(user_message, GROQ_API_KEY)
+        
+        return JsonResponse(result)
+        
+    return JsonResponse({"status": "error", "message": "Invalid request method."})
